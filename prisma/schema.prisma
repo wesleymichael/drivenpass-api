@@ -79,3 +79,10 @@ model Cards {
   @@unique([userId, title])
   @@map("cards")
 }
+
+model Wifi {
+  id       Int    @id @default(autoincrement())
+  title    String @db.VarChar(255)
+  name     String @db.VarChar(255)
+  password String @db.VarChar(255)
+}
