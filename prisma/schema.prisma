@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id          Int           @id @default(autoincrement())
+  email       String        @unique @db.VarChar(255)
+  password    String        @db.VarChar(255)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Credentials Credentials[]
+  Notes       Notes[]
+  Cards       Cards[]
+
+  @@map("users")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("session")
+}
+
+model Credentials {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  url       String   @db.VarChar(255)
+  username  String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  User      Users    @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, title])
+  @@map("credentials")
+}
+
+model Notes {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  anotation String
+  Users     Users    @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, title])
+  @@map("notes")
+}
+
+model Cards {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  number    String   @unique
+  name      String   @db.VarChar(255)
+  cvv       String   @db.VarChar(255)
+  exp       String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  isVirtual Boolean
+  isCredit  Boolean
+  isDebit   Boolean
+  Users     Users    @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, title])
+  @@map("cards")
+}
