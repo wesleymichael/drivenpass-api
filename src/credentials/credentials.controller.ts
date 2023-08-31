@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CredentialsService } from './credentials.service';
 import { AuthGuard } from '@/guards/auth.guard';
 import { CredentialDTO } from './dto/credentials.dto';
@@ -23,6 +32,26 @@ export class CredentialsController {
 
   @Get()
   async findAllCredentials(@User() user: Users) {
-    return await this.credentialsService.findAllByUserId(user.id);
+    return await this.credentialsService.findAllCredentialsByUserId(user.id);
+  }
+
+  @Get('/:id')
+  async findCredentialById(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        exceptionFactory: () => new BadRequestException('Invalid ID format'),
+      }),
+    )
+    id: number,
+    @User() user: Users,
+  ) {
+    if (id <= 0) {
+      throw new BadRequestException('ID must be a positive integer');
+    }
+    return await this.credentialsService.findCredentialByIdAndUserId(
+      id,
+      user.id,
+    );
   }
 }

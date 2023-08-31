@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CredentialDTO } from './dto/credentials.dto';
 import { PrismaService } from '@/prisma/prisma.service';
+import { Credentials } from '@prisma/client';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cryptr = require('cryptr');
 
@@ -14,7 +15,7 @@ export class CredentialsRepository {
     return this.prisma.credentials.create({
       data: {
         ...credentialsDTO,
-        password: this.cryptr.encrypt(credentialsDTO.password),
+        password: this.cryptr.encrypt(credentialsDTO.password) as string,
         userId,
       },
     });
@@ -31,15 +32,35 @@ export class CredentialsRepository {
     });
   }
 
-  async findAllByUserId(userId: number) {
+  async findAllCredentialsByUserId(userId: number) {
     const credentials = await this.prisma.credentials.findMany({
       where: { userId },
     });
 
+    return this.decrypCredentialsPassword(credentials);
+  }
+
+  async findCredentialByIdAndUserId(id: number, userId: number) {
+    const credential = await this.prisma.credentials.findUnique({
+      where: {
+        id,
+        userId,
+      },
+    });
+    return this.decrypCredentialsPassword([credential]);
+  }
+
+  findCredentialById(id: number) {
+    return this.prisma.credentials.findUnique({
+      where: { id },
+    });
+  }
+
+  private decrypCredentialsPassword(credentials: Credentials[]) {
     return credentials.map((credential) => {
       return {
         ...credential,
-        password: this.cryptr.decrypt(credential.password),
+        password: this.cryptr.decrypt(credential.password) as string,
       };
     });
   }
