@@ -19,4 +19,15 @@ export class CredentialsRepository {
       },
     });
   }
+
+  findCredentialByUserIdAndTitle(userId: number, title: string) {
+    return this.prisma.credentials.findUnique({
+      where: {
+        userId_title: {
+          userId,
+          title,
+        },
+      },
+    });
+  }
 }
