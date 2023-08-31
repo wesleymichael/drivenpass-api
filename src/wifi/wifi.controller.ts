@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { WifiService } from './wifi.service';
 import { AuthGuard } from '@/guards/auth.guard';
 import { User } from '@/decorators/user.decorator';
@@ -13,5 +13,10 @@ export class WifiController {
   @Post()
   async createCredential(@Body() wifiDTO: WifiDTO, @User() user: Users) {
     return await this.wifiService.createWifi(user.id, wifiDTO);
+  }
+
+  @Get()
+  async findAllWifi(@User() user: Users) {
+    return await this.wifiService.findAllWifiByUserId(user.id);
   }
 }

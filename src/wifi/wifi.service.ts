@@ -9,4 +9,8 @@ export class WifiService {
   async createWifi(userId: number, wifiDTO: WifiDTO) {
     return await this.repository.createWifi(userId, wifiDTO);
   }
+
+  async findAllWifiByUserId(userId: number) {
+    return await this.repository.findAllWifiByUserId(userId);
+  }
 }

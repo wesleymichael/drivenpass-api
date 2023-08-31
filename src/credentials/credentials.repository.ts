@@ -38,7 +38,7 @@ export class CredentialsRepository {
       where: { userId },
     });
 
-    return this.decrypCredentialsPassword(credentials);
+    return this.decryptCredentialsPassword(credentials);
   }
 
   // async findCredentialByIdAndUserId(id: number, userId: number) {
@@ -55,7 +55,7 @@ export class CredentialsRepository {
     const credential = await this.prisma.credentials.findFirst({
       where: { id },
     });
-    return credential ? this.decrypCredentialsPassword([credential]) : [];
+    return credential ? this.decryptCredentialsPassword([credential]) : [];
   }
 
   deleteCredential(id: number) {
@@ -64,7 +64,7 @@ export class CredentialsRepository {
     });
   }
 
-  private decrypCredentialsPassword(credentials: Credentials[]) {
+  private decryptCredentialsPassword(credentials: Credentials[]) {
     return credentials.map((credential) => {
       return {
         ...credential,
