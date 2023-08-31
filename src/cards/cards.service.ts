@@ -38,4 +38,17 @@ export class CardsService {
 
     return card;
   }
+
+  async deleteCard(id: number, userId: number) {
+    const card = await this.repository.findCardById(id);
+    if (card.length === 0) {
+      throw new NotFoundException('There is no card for the submitted id');
+    }
+
+    if (card[0].userId !== userId) {
+      throw new ForbiddenException('Card belongs to another user');
+    }
+
+    return await this.repository.deleteCard(id);
+  }
 }

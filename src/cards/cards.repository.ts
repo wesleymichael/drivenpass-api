@@ -49,6 +49,12 @@ export class CardsRepository {
     return card ? this.decryptCardsData([card]) : [];
   }
 
+  deleteCard(id: number) {
+    return this.prisma.cards.delete({
+      where: { id },
+    });
+  }
+
   private decryptCardsData(cards: Cards[]) {
     return cards.map((card) => {
       return {

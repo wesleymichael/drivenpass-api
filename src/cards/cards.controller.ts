@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -44,5 +45,22 @@ export class CardsController {
       throw new BadRequestException('ID must be a positive integer');
     }
     return await this.cardsService.findCardById(id, user.id);
+  }
+
+  @Delete('/:id')
+  async deleteCard(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        exceptionFactory: () => new BadRequestException('Invalid ID format'),
+      }),
+    )
+    id: number,
+    @User() user: Users,
+  ) {
+    if (id <= 0) {
+      throw new BadRequestException('ID must be a positive integer');
+    }
+    return await this.cardsService.deleteCard(id, user.id);
   }
 }
