@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CardsRepository } from './cards.repository';
 import { CardsDTO } from './dto/cards.dto';
 
@@ -19,5 +24,18 @@ export class CardsService {
 
   async findAllCards(userId: number) {
     return await this.repository.findAllCards(userId);
+  }
+
+  async findCardById(id: number, userId: number) {
+    const card = await this.repository.findCardById(id);
+    if (card.length === 0) {
+      throw new NotFoundException('There is no card for the submitted id');
+    }
+
+    if (card[0].userId !== userId) {
+      throw new ForbiddenException('Credential belongs to another user');
+    }
+
+    return card;
   }
 }

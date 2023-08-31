@@ -42,6 +42,13 @@ export class CardsRepository {
     return this.decryptCardsData(cards);
   }
 
+  async findCardById(id: number) {
+    const card = await this.prisma.cards.findFirst({
+      where: { id },
+    });
+    return card ? this.decryptCardsData([card]) : [];
+  }
+
   private decryptCardsData(cards: Cards[]) {
     return cards.map((card) => {
       return {
