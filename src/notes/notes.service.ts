@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { NotesRepository } from './notes.repository';
 import { NotesDTO } from './dto/notes.dto';
 
@@ -20,5 +25,18 @@ export class NotesService {
 
   async findAllNotes(userId: number) {
     return await this.repository.findAllNotes(userId);
+  }
+
+  async findNoteById(id: number, userId: number) {
+    const note = await this.repository.findNoteById(id);
+    if (!note) {
+      throw new NotFoundException('There is no note for the submitted id');
+    }
+
+    if (note.userId !== userId) {
+      throw new ForbiddenException('Note belongs to another user');
+    }
+
+    return [note];
   }
 }

@@ -31,4 +31,10 @@ export class NotesRepository {
       where: { userId: userId },
     });
   }
+
+  findNoteById(id: number) {
+    return this.prisma.notes.findUnique({
+      where: { id },
+    });
+  }
 }

@@ -33,7 +33,7 @@ export class CredentialsService {
       throw new NotFoundException('There is no credential for the submitted id');
     }
 
-    if(credential[0].userId !== userId) {
+    if (credential[0].userId !== userId) {
       throw new ForbiddenException('credential belongs to another user');
     }
 
