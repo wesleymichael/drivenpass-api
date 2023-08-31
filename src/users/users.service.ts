@@ -15,4 +15,8 @@ export class UsersService {
 
     return await this.repository.create(userDTO);
   }
+
+  async getUserByEmail(email: string) {
+    return await this.repository.getUserByEmail(email);
+  }
 }
