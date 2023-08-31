@@ -42,7 +42,7 @@ export class NotesService {
 
   async deleteNote(id: number, userId: number) {
     const note = await this.repository.findNoteById(id);
-    if (note) {
+    if (!note) {
       throw new NotFoundException('There is no note for the submitted id');
     }
 
