@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -53,5 +54,22 @@ export class CredentialsController {
       id,
       user.id,
     );
+  }
+
+  @Delete('/:id')
+  async deleteCredential(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        exceptionFactory: () => new BadRequestException('Invalid ID format'),
+      }),
+    )
+    id: number,
+    @User() user: Users,
+  ) {
+    if (id <= 0) {
+      throw new BadRequestException('ID must be a positive integer');
+    }
+    return await this.credentialsService.deleteCredential(id, user.id);
   }
 }

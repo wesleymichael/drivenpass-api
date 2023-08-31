@@ -40,4 +40,17 @@ export class CredentialsService {
 
     return credential;
   }
+
+  async deleteCredential(id: number, userId: number) {
+    const credential = await this.repository.findCredentialById(id);
+    if (!credential) {
+      throw new NotFoundException('There is no credential for the submitted id');
+    }
+
+    if(credential.userId !== userId) {
+      throw new ForbiddenException('credential belongs to another user');
+    }
+
+    return await this.repository.deleteCredential(id);
+  }
 }

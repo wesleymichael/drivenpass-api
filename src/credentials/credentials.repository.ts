@@ -56,6 +56,12 @@ export class CredentialsRepository {
     });
   }
 
+  deleteCredential(id: number) {
+    return this.prisma.credentials.delete({
+      where: { id },
+    });
+  }
+
   private decrypCredentialsPassword(credentials: Credentials[]) {
     return credentials.map((credential) => {
       return {
