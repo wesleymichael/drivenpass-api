@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CredentialsService } from './credentials.service';
 import { AuthGuard } from '@/guards/auth.guard';
 import { CredentialDTO } from './dto/credentials.dto';
@@ -19,5 +19,10 @@ export class CredentialsController {
       user.id,
       credentialDTO,
     );
+  }
+
+  @Get()
+  async findAllCredentials(@User() user: Users) {
+    return await this.credentialsService.findAllByUserId(user.id);
   }
 }

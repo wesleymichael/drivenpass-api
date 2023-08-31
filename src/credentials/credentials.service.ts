@@ -16,4 +16,8 @@ export class CredentialsService {
     }
     return await this.repository.createCredential(userId, credentialsDTO);
   }
+
+  async findAllByUserId(userId: number) {
+    return await this.repository.findAllByUserId(userId);
+  }
 }
