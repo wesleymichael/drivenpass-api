@@ -23,4 +23,10 @@ export class UsersRepository {
       where: { email },
     });
   }
+
+  getUserById(id: number) {
+    return this.prisma.users.findUnique({
+      where: { id },
+    });
+  }
 }
