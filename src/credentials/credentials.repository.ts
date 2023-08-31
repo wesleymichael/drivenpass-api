@@ -9,6 +9,7 @@ const Cryptr = require('cryptr');
 export class CredentialsRepository {
   private code = process.env.SECRET_KEY_CRYPTR;
   private cryptr = new Cryptr(this.code);
+
   constructor(private readonly prisma: PrismaService) {}
 
   createCredential(userId: number, credentialsDTO: CredentialDTO) {
