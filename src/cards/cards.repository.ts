@@ -14,4 +14,15 @@ export class CardsRepository {
       },
     });
   }
+
+  findCardByUserIdAndTitle(userId: number, title: string) {
+    return this.prisma.cards.findUnique({
+      where: {
+        userId_title: {
+          userId,
+          title,
+        },
+      },
+    });
+  }
 }
