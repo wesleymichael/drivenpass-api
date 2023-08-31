@@ -1,6 +1,7 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { CardsDTO } from './dto/cards.dto';
+import { Cards } from '@prisma/client';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cryptr = require('cryptr');
 
@@ -30,6 +31,24 @@ export class CardsRepository {
           title,
         },
       },
+    });
+  }
+
+  async findAllCards(userId) {
+    const cards = await this.prisma.cards.findMany({
+      where: { userId },
+    });
+
+    return this.decryptCardsData(cards);
+  }
+
+  private decryptCardsData(cards: Cards[]) {
+    return cards.map((card) => {
+      return {
+        ...card,
+        cvv: this.cryptr.decrypt(card.cvv) as string,
+        password: this.cryptr.decrypt(card.password) as string,
+      };
     });
   }
 }

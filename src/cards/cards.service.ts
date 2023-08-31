@@ -16,4 +16,8 @@ export class CardsService {
     }
     return await this.repository.createCard(cardDTO, userId);
   }
+
+  async findAllCards(userId: number) {
+    return await this.repository.findAllCards(userId);
+  }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { AuthGuard } from '@/guards/auth.guard';
 import { CardsDTO } from './dto/cards.dto';
@@ -13,5 +13,10 @@ export class CardsController {
   @Post()
   async createCredential(@Body() cardDTO: CardsDTO, @User() user: Users) {
     return await this.cardsService.createCard(cardDTO, user.id);
+  }
+
+  @Get()
+  async findAllCards(@User() user: Users) {
+    return this.cardsService.findAllCards(user.id);
   }
 }
