@@ -61,6 +61,7 @@ export class CardsController {
     if (id <= 0) {
       throw new BadRequestException('ID must be a positive integer');
     }
+
     return await this.cardsService.deleteCard(id, user.id);
   }
 }

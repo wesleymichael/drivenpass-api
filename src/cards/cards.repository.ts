@@ -34,12 +34,18 @@ export class CardsRepository {
     });
   }
 
-  async findAllCards(userId) {
+  async findAllCards(userId: number) {
     const cards = await this.prisma.cards.findMany({
       where: { userId },
     });
 
     return this.decryptCardsData(cards);
+  }
+
+  findCardByNumber(cardNumber: string) {
+    return this.prisma.cards.findUnique({
+      where: { number: cardNumber },
+    });
   }
 
   async findCardById(id: number) {

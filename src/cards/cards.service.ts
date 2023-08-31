@@ -19,6 +19,12 @@ export class CardsService {
     if (card) {
       throw new ConflictException('A title with that name already exists.');
     }
+
+    const cardByNumber = await this.repository.findCardByNumber(cardDTO.number);
+    if (cardByNumber) {
+      throw new ConflictException('A card with that number already exists.');
+    }
+
     return await this.repository.createCard(cardDTO, userId);
   }
 
