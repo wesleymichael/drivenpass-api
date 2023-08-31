@@ -31,9 +31,16 @@ export class CredentialsRepository {
     });
   }
 
-  findAllByUserId(userId: number) {
-    return this.prisma.credentials.findMany({
+  async findAllByUserId(userId: number) {
+    const credentials = await this.prisma.credentials.findMany({
       where: { userId },
+    });
+
+    return credentials.map((credential) => {
+      return {
+        ...credential,
+        password: this.cryptr.decrypt(credential.password),
+      };
     });
   }
 }
