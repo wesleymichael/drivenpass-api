@@ -27,14 +27,13 @@ export class CredentialsService {
     return await this.repository.findAllCredentialsByUserId(userId);
   }
 
-  async findCredentialByIdAndUserId(id: number, userId: number) {
-    const credentialById = await this.repository.findCredentialById(id);
-    if (!credentialById) {
+  async findCredentialById(id: number, userId: number) {
+    const credential = await this.repository.findCredentialById(id);
+    if (credential.length === 0) {
       throw new NotFoundException('There is no credential for the submitted id');
     }
 
-    const credential =  await this.repository.findCredentialByIdAndUserId(id, userId);
-    if(credential.length === 0) {
+    if(credential[0].userId !== userId) {
       throw new ForbiddenException('credential belongs to another user');
     }
 
@@ -43,11 +42,11 @@ export class CredentialsService {
 
   async deleteCredential(id: number, userId: number) {
     const credential = await this.repository.findCredentialById(id);
-    if (!credential) {
+    if (credential.length === 0) {
       throw new NotFoundException('There is no credential for the submitted id');
     }
 
-    if(credential.userId !== userId) {
+    if(credential[0].userId !== userId) {
       throw new ForbiddenException('credential belongs to another user');
     }
 

@@ -40,20 +40,21 @@ export class CredentialsRepository {
     return this.decrypCredentialsPassword(credentials);
   }
 
-  async findCredentialByIdAndUserId(id: number, userId: number) {
-    const credential = await this.prisma.credentials.findUnique({
-      where: {
-        id,
-        userId,
-      },
-    });
-    return this.decrypCredentialsPassword([credential]);
-  }
+  // async findCredentialByIdAndUserId(id: number, userId: number) {
+  //   const credential = await this.prisma.credentials.findUnique({
+  //     where: {
+  //       id,
+  //       userId,
+  //     },
+  //   });
+  //   return this.decrypCredentialsPassword([credential]);
+  // }
 
-  findCredentialById(id: number) {
-    return this.prisma.credentials.findUnique({
+  async findCredentialById(id: number) {
+    const credential = await this.prisma.credentials.findFirst({
       where: { id },
     });
+    return credential ? this.decrypCredentialsPassword([credential]) : [];
   }
 
   deleteCredential(id: number) {

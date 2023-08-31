@@ -50,10 +50,7 @@ export class CredentialsController {
     if (id <= 0) {
       throw new BadRequestException('ID must be a positive integer');
     }
-    return await this.credentialsService.findCredentialByIdAndUserId(
-      id,
-      user.id,
-    );
+    return await this.credentialsService.findCredentialById(id, user.id);
   }
 
   @Delete('/:id')
