@@ -39,4 +39,17 @@ export class NotesService {
 
     return [note];
   }
+
+  async deleteNote(id: number, userId: number) {
+    const note = await this.repository.findNoteById(id);
+    if (note) {
+      throw new NotFoundException('There is no note for the submitted id');
+    }
+
+    if (note.userId !== userId) {
+      throw new ForbiddenException('Note belongs to another user');
+    }
+
+    return await this.repository.deleteNote(id);
+  }
 }

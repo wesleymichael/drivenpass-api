@@ -37,4 +37,10 @@ export class NotesRepository {
       where: { id },
     });
   }
+
+  deleteNote(id: number) {
+    return this.prisma.notes.delete({
+      where: { id },
+    });
+  }
 }

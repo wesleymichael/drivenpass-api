@@ -34,7 +34,7 @@ export class CredentialsService {
     }
 
     if (credential[0].userId !== userId) {
-      throw new ForbiddenException('credential belongs to another user');
+      throw new ForbiddenException('Credential belongs to another user');
     }
 
     return credential;
@@ -46,8 +46,8 @@ export class CredentialsService {
       throw new NotFoundException('There is no credential for the submitted id');
     }
 
-    if(credential[0].userId !== userId) {
-      throw new ForbiddenException('credential belongs to another user');
+    if (credential[0].userId !== userId) {
+      throw new ForbiddenException('Credential belongs to another user');
     }
 
     return await this.repository.deleteCredential(id);
