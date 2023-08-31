@@ -38,13 +38,7 @@ export class CredentialsController {
 
   @Get('/:id')
   async findCredentialById(
-    @Param(
-      'id',
-      new ParseIntPipe({
-        exceptionFactory: () => new BadRequestException('Invalid ID format'),
-      }),
-    )
-    id: number,
+    @Param('id', ParseIntPipe) id: number,
     @User() user: Users,
   ) {
     if (id <= 0) {
@@ -55,13 +49,7 @@ export class CredentialsController {
 
   @Delete('/:id')
   async deleteCredential(
-    @Param(
-      'id',
-      new ParseIntPipe({
-        exceptionFactory: () => new BadRequestException('Invalid ID format'),
-      }),
-    )
-    id: number,
+    @Param('id', ParseIntPipe) id: number,
     @User() user: Users,
   ) {
     if (id <= 0) {

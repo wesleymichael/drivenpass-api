@@ -32,13 +32,7 @@ export class CardsController {
 
   @Get('/:id')
   async findCredentialById(
-    @Param(
-      'id',
-      new ParseIntPipe({
-        exceptionFactory: () => new BadRequestException('Invalid ID format'),
-      }),
-    )
-    id: number,
+    @Param('id', ParseIntPipe) id: number,
     @User() user: Users,
   ) {
     if (id <= 0) {
@@ -48,16 +42,7 @@ export class CardsController {
   }
 
   @Delete('/:id')
-  async deleteCard(
-    @Param(
-      'id',
-      new ParseIntPipe({
-        exceptionFactory: () => new BadRequestException('Invalid ID format'),
-      }),
-    )
-    id: number,
-    @User() user: Users,
-  ) {
+  async deleteCard(@Param('id', ParseIntPipe) id: number, @User() user: Users) {
     if (id <= 0) {
       throw new BadRequestException('ID must be a positive integer');
     }

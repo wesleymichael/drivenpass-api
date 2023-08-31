@@ -32,13 +32,7 @@ export class NotesController {
 
   @Get('/:id')
   async findNoteById(
-    @Param(
-      'id',
-      new ParseIntPipe({
-        exceptionFactory: () => new BadRequestException('Invalid ID format'),
-      }),
-    )
-    id: number,
+    @Param('id', ParseIntPipe) id: number,
     @User() user: Users,
   ) {
     if (id <= 0) {
@@ -48,16 +42,7 @@ export class NotesController {
   }
 
   @Delete('/:id')
-  async deleteNote(
-    @Param(
-      'id',
-      new ParseIntPipe({
-        exceptionFactory: () => new BadRequestException('Invalid ID format'),
-      }),
-    )
-    id: number,
-    @User() user: Users,
-  ) {
+  async deleteNote(@Param('id', ParseIntPipe) id: number, @User() user: Users) {
     if (id <= 0) {
       throw new BadRequestException('ID must be a positive integer');
     }
