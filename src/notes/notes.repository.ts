@@ -25,4 +25,10 @@ export class NotesRepository {
       },
     });
   }
+
+  findAllNotes(userId: number) {
+    return this.prisma.notes.findMany({
+      where: { userId: userId },
+    });
+  }
 }

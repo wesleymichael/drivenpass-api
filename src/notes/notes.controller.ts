@@ -1,5 +1,5 @@
 import { AuthGuard } from '@/guards/auth.guard';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { NotesDTO } from './dto/notes.dto';
 import { User } from '@/decorators/user.decorator';
@@ -13,5 +13,10 @@ export class NotesController {
   @Post()
   async createNote(@Body() noteDTO: NotesDTO, @User() user: Users) {
     return await this.notesService.createNote(noteDTO, user.id);
+  }
+
+  @Get()
+  async findAllNotes(@User() user: Users) {
+    return await this.notesService.findAllNotes(user.id);
   }
 }

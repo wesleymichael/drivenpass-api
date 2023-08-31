@@ -17,4 +17,8 @@ export class NotesService {
 
     return await this.repository.createNotes(noteDTO, userId);
   }
+
+  async findAllNotes(userId: number) {
+    return await this.repository.findAllNotes(userId);
+  }
 }
