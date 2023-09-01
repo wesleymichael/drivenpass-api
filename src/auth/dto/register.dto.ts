@@ -18,4 +18,8 @@ export class RegisterDto {
       'A senha deve conter pelo menos 1 número, 1 letra minúscula, 1 letra maiúscula e 1 caractere especial',
   })
   password: string;
+
+  constructor(params?: Partial<RegisterDto>) {
+    if (params) Object.assign(this, params);
+  }
 }
