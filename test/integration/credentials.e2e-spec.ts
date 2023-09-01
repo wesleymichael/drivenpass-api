@@ -1,3 +1,4 @@
+import { BodyCredential } from './../factories/credentials.body';
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
@@ -8,11 +9,10 @@ import { cleanDB } from '../helpers';
 import { RegisterFactory } from '../factories/register.factory';
 import { login } from '../factories/login';
 import { BodyLogin } from '../factories/body.login';
-import { BodyCard } from '../factories/cards.body';
 import { faker } from '@faker-js/faker';
-import { CardsFactory } from '../factories/cards.factory';
+import { CredentialsFactory } from '../factories/credentials.factory';
 
-describe('cardsController (e2e)', () => {
+describe('credentialsController (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
@@ -34,21 +34,21 @@ describe('cardsController (e2e)', () => {
     await app.close();
   });
 
-  describe('/cards (POST)', () => {
+  describe('/credentials (POST)', () => {
     it('should respond with status 401 if no token is given', async () => {
-      const bodyCards = new BodyCard().generate();
+      const bodyCredential = new BodyCredential().generate();
       await request(app.getHttpServer())
-        .post('/cards')
-        .send(bodyCards)
+        .post('/credentials')
+        .send(bodyCredential)
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
     it('should respond with status 401 if given token is not valid', async () => {
       const token = faker.lorem.word();
-      const bodyCards = new BodyCard().generate();
+      const bodyCredential = new BodyCredential().generate();
       await request(app.getHttpServer())
-        .post('/cards')
-        .send(bodyCards)
+        .post('/credentials')
+        .send(bodyCredential)
         .set('Authorization', `Bearer ${token}`)
         .expect(HttpStatus.UNAUTHORIZED);
     });
@@ -59,101 +59,85 @@ describe('cardsController (e2e)', () => {
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
-      const bodyCard1 = new BodyCard().generate();
-      const bodyCard2 = new BodyCard().generate();
+
+      const bodyCredential1 = new BodyCredential().generate();
+      const bodyCredential2 = new BodyCredential().generate();
       await request(app.getHttpServer())
-        .post('/cards')
-        .send(bodyCard1)
+        .post('/credentials')
+        .send(bodyCredential1)
         .set('Authorization', `Bearer ${body.token}`);
+
       return await request(app.getHttpServer())
-        .post('/cards')
-        .send({ ...bodyCard2, title: bodyCard1.title })
+        .post('/credentials')
+        .send({ ...bodyCredential2, title: bodyCredential1.title })
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.CONFLICT);
     });
 
-    it('should respond with status 409 when card number already exist', async () => {
+    it('should create a credential', async () => {
       const bodyLogin = new BodyLogin().generate();
       await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
-      const { body } = await login(app, bodyLogin);
-      const bodyCard1 = new BodyCard().generate();
-      const bodyCard2 = new BodyCard().generate();
-      await request(app.getHttpServer())
-        .post('/cards')
-        .send(bodyCard1)
-        .set('Authorization', `Bearer ${body.token}`);
-      return await request(app.getHttpServer())
-        .post('/cards')
-        .send({ ...bodyCard2, number: bodyCard1.number })
-        .set('Authorization', `Bearer ${body.token}`)
-        .expect(HttpStatus.CONFLICT);
-    });
 
-    it('should create a card', async () => {
-      const bodyLogin = new BodyLogin().generate();
-      await new RegisterFactory(prisma)
-        .withEmail(bodyLogin.email)
-        .withPassword(bodyLogin.password)
-        .persist();
       const { body } = await login(app, bodyLogin);
-      const bodyCard = new BodyCard().generate();
+
+      const bodyCredential = new BodyCredential().generate();
       await request(app.getHttpServer())
-        .post('/cards')
-        .send(bodyCard)
+        .post('/credentials')
+        .send(bodyCredential)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.CREATED);
     });
   });
 
-  describe('/cards (GET)', () => {
+  describe('/credentials (GET)', () => {
     it('should respond with status 401 if no token is given', async () => {
       await request(app.getHttpServer())
-        .get('/cards')
+        .get('/credentials')
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
     it('should respond with status 401 if given token is not valid', async () => {
       const token = faker.lorem.word();
       await request(app.getHttpServer())
-        .get('/cards')
+        .get('/credentials')
         .set('Authorization', `Bearer ${token}`)
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
-    it('should respond with status 200 and with cards data', async () => {
+    it('should respond with status 200 and with credentials data', async () => {
       const bodyLogin = new BodyLogin().generate();
       const user = await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
-      const cardBody = new BodyCard().generate();
-      await new CardsFactory(prisma)
-        .withBodyCard(cardBody)
+
+      const credentialBody = new BodyCredential().generate();
+      await new CredentialsFactory(prisma)
+        .withBodyCredential(credentialBody)
         .withUserId(user.id)
         .persist();
+
       const response = await request(app.getHttpServer())
-        .get('/cards')
+        .get('/credentials')
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.OK);
+
       expect(response.body).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(Number),
             userId: user.id,
-            title: cardBody.title,
-            number: cardBody.number,
-            name: cardBody.name,
-            cvv: expect.any(String),
-            exp: cardBody.exp,
+            title: credentialBody.title,
+            username: credentialBody.username,
+            url: credentialBody.url,
             password: expect.any(String),
-            isVirtual: cardBody.isVirtual,
-            isCredit: cardBody.isCredit,
-            isDebit: cardBody.isDebit,
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
           }),
@@ -162,17 +146,17 @@ describe('cardsController (e2e)', () => {
     });
   });
 
-  describe('/cards/:id (GET)', () => {
+  describe('/credentials/:id (GET)', () => {
     it('should respond with status 401 if no token is given', async () => {
       await request(app.getHttpServer())
-        .get('/cards/1')
+        .get('/credentials/1')
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
     it('should respond with status 401 if given token is not valid', async () => {
       const token = faker.lorem.word();
       await request(app.getHttpServer())
-        .get('/cards/1')
+        .get('/credentials/1')
         .set('Authorization', `Bearer ${token}`)
         .expect(HttpStatus.UNAUTHORIZED);
     });
@@ -183,9 +167,11 @@ describe('cardsController (e2e)', () => {
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
+
       await request(app.getHttpServer())
-        .get('/cards/a')
+        .get('/credentials/a')
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.BAD_REQUEST);
     });
@@ -196,81 +182,85 @@ describe('cardsController (e2e)', () => {
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
+
       await request(app.getHttpServer())
-        .get('/cards/-1')
+        .get('/credentials/-1')
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it('should respond with status 404 if there is no card for the submitted id', async () => {
+    it('should respond with status 404 if there is no credential for the submitted id', async () => {
       const bodyLogin = new BodyLogin().generate();
       await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
+
       await request(app.getHttpServer())
-        .get('/cards/1')
+        .get('/credentials/1')
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.NOT_FOUND);
     });
 
-    it('should respond with status 403 if card belongs to another user', async () => {
-      //Criar um user e criar um card para esse user
+    it('should respond with status 403 if credentials belongs to another user', async () => {
       const creatorBodyLogin = new BodyLogin().generate();
       const creatorUser = await new RegisterFactory(prisma)
         .withEmail(creatorBodyLogin.email)
         .withPassword(creatorBodyLogin.password)
         .persist();
-      const cardBody = new BodyCard().generate();
-      const card = await new CardsFactory(prisma)
-        .withBodyCard(cardBody)
+
+      const credentialBody = new BodyCredential().generate();
+      const credential = await new CredentialsFactory(prisma)
+        .withBodyCredential(credentialBody)
         .withUserId(creatorUser.id)
         .persist();
-      //Criar um novo user e gerar o token, buscando pelo id do card criado pelo user anterior
+
       const bodyLogin = new BodyLogin().generate();
       await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
       await request(app.getHttpServer())
-        .get(`/cards/${card.id}`)
+        .get(`/credentials/${credential.id}`)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.FORBIDDEN);
     });
 
-    it('should respond with status 200 and card data', async () => {
+    it('should respond with status 200 and credential data', async () => {
       const bodyLogin = new BodyLogin().generate();
       const user = await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
-      const cardBody = new BodyCard().generate();
-      const card = await new CardsFactory(prisma)
-        .withBodyCard(cardBody)
+
+      const credentialBody = new BodyCredential().generate();
+      const credential = await new CredentialsFactory(prisma)
+        .withBodyCredential(credentialBody)
         .withUserId(user.id)
         .persist();
+
       const { body } = await login(app, bodyLogin);
+
       const response = await request(app.getHttpServer())
-        .get(`/cards/${card.id}`)
+        .get(`/credentials/${credential.id}`)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.OK);
+
       expect(response.body).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(Number),
             userId: user.id,
-            title: cardBody.title,
-            number: cardBody.number,
-            name: cardBody.name,
-            cvv: expect.any(String),
-            exp: cardBody.exp,
+            title: credentialBody.title,
+            username: credentialBody.username,
+            url: credentialBody.url,
             password: expect.any(String),
-            isVirtual: cardBody.isVirtual,
-            isCredit: cardBody.isCredit,
-            isDebit: cardBody.isDebit,
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
           }),
@@ -279,17 +269,17 @@ describe('cardsController (e2e)', () => {
     });
   });
 
-  describe('/cards/:id (DELETE)', () => {
+  describe('/credentials/:id (DELETE)', () => {
     it('should respond with status 401 if no token is given', async () => {
       await request(app.getHttpServer())
-        .delete('/cards/1')
+        .delete('/credentials/1')
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
     it('should respond with status 401 if given token is not valid', async () => {
       const token = faker.lorem.word();
       await request(app.getHttpServer())
-        .delete('/cards/1')
+        .delete('/credentials/1')
         .set('Authorization', `Bearer ${token}`)
         .expect(HttpStatus.UNAUTHORIZED);
     });
@@ -304,7 +294,7 @@ describe('cardsController (e2e)', () => {
       const { body } = await login(app, bodyLogin);
 
       await request(app.getHttpServer())
-        .delete('/cards/a')
+        .delete('/credentials/a')
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.BAD_REQUEST);
     });
@@ -319,39 +309,39 @@ describe('cardsController (e2e)', () => {
       const { body } = await login(app, bodyLogin);
 
       await request(app.getHttpServer())
-        .delete('/cards/-1')
+        .delete('/credentials/-1')
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it('should respond with status 404 if there is no card for the submitted id', async () => {
+    it('should respond with status 404 if there is no credential for the submitted id', async () => {
       const bodyLogin = new BodyLogin().generate();
       await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
+
       await request(app.getHttpServer())
-        .delete('/cards/1')
+        .delete('/credentials/1')
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.NOT_FOUND);
     });
 
-    it('should respond with status 403 if card belongs to another user', async () => {
-      //Criar um user e um card para esse user
+    it('should respond with status 403 if credential belongs to another user', async () => {
       const creatorBodyLogin = new BodyLogin().generate();
       const creatorUser = await new RegisterFactory(prisma)
         .withEmail(creatorBodyLogin.email)
         .withPassword(creatorBodyLogin.password)
         .persist();
 
-      const cardBody = new BodyCard().generate();
-      const card = await new CardsFactory(prisma)
-        .withBodyCard(cardBody)
+      const credentialBody = new BodyCredential().generate();
+      const credential = await new CredentialsFactory(prisma)
+        .withBodyCredential(credentialBody)
         .withUserId(creatorUser.id)
         .persist();
 
-      //Criar um novo user e gerar o token, buscando pelo id do card criado pelo user anterior
       const bodyLogin = new BodyLogin().generate();
       await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
@@ -359,33 +349,34 @@ describe('cardsController (e2e)', () => {
         .persist();
 
       const { body } = await login(app, bodyLogin);
+
       await request(app.getHttpServer())
-        .delete(`/cards/${card.id}`)
+        .delete(`/credentials/${credential.id}`)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.FORBIDDEN);
     });
 
-    it('should respond with status 200 and card data', async () => {
+    it('should respond with status 200 and credential data', async () => {
       const bodyLogin = new BodyLogin().generate();
       const user = await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
 
-      const cardBody = new BodyCard().generate();
-      const card = await new CardsFactory(prisma)
-        .withBodyCard(cardBody)
+      const credentialBody = new BodyCredential().generate();
+      const credential = await new CredentialsFactory(prisma)
+        .withBodyCredential(credentialBody)
         .withUserId(user.id)
         .persist();
 
       const { body } = await login(app, bodyLogin);
       await request(app.getHttpServer())
-        .delete(`/cards/${card.id}`)
+        .delete(`/credentials/${credential.id}`)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.OK);
 
       await request(app.getHttpServer())
-        .get(`/cards/${card.id}`)
+        .get(`/credentials/${credential.id}`)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(HttpStatus.NOT_FOUND);
     });

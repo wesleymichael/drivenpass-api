@@ -33,42 +33,6 @@ export class BodyCard {
     this._isDebit = isDebit || faker.datatype.boolean();
   }
 
-  get title() {
-    return this._title;
-  }
-
-  get number() {
-    return this._number;
-  }
-
-  get name() {
-    return this._name;
-  }
-
-  get cvv() {
-    return this._cvv;
-  }
-
-  get exp() {
-    return this._exp;
-  }
-
-  get password() {
-    return this._password;
-  }
-
-  get isVirtual() {
-    return this._isVirtual;
-  }
-
-  get isCredit() {
-    return this._isCredit;
-  }
-
-  get isDebit() {
-    return this._isDebit;
-  }
-
   generate() {
     return {
       title: this._title,
