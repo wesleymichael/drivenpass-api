@@ -1,18 +1,18 @@
-import { CredentialDTO } from '@/credentials/dto/credentials.dto';
 import { PrismaService } from '@/prisma/prisma.service';
+import { WifiDTO } from '@/wifi/dto/wifi.dto';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Cryptr = require('cryptr');
 
-export class CredentialsFactory {
-  private bodyCredential: CredentialDTO;
+export class WifisFactory {
+  private bodyWifi: WifiDTO;
   private userId: number;
   private code = process.env.SECRET_KEY_CRYPTR;
   private cryptr = new Cryptr(this.code);
 
   constructor(private readonly prisma: PrismaService) {}
 
-  withBodyCredential(body: CredentialDTO) {
-    this.bodyCredential = body;
+  withBodyWifi(body: WifiDTO) {
+    this.bodyWifi = body;
     return this;
   }
 
@@ -23,16 +23,18 @@ export class CredentialsFactory {
 
   build() {
     return {
-      ...this.bodyCredential,
-      password: this.cryptr.encrypt(this.bodyCredential.password) as string,
+      ...this.bodyWifi,
       userId: this.userId,
     };
   }
 
   async persist() {
-    const credential = this.build();
-    return await this.prisma.credentials.create({
-      data: credential,
+    const wifi = this.build();
+    return await this.prisma.wifi.create({
+      data: {
+        ...wifi,
+        password: this.cryptr.encrypt(wifi.password) as string,
+      },
     });
   }
 }

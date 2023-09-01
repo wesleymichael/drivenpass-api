@@ -31,9 +31,9 @@ export class CardsFactory {
   }
 
   async persist() {
-    const user = this.build();
+    const card = this.build();
     return await this.prisma.cards.create({
-      data: user,
+      data: card,
     });
   }
 }

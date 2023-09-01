@@ -25,9 +25,9 @@ export class NotesFactory {
   }
 
   async persist() {
-    const user = this.build();
+    const notes = this.build();
     return await this.prisma.notes.create({
-      data: user,
+      data: notes,
     });
   }
 }

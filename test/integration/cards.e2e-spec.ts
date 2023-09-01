@@ -365,7 +365,7 @@ describe('cardsController (e2e)', () => {
         .expect(HttpStatus.FORBIDDEN);
     });
 
-    it('should respond with status 200 and card data', async () => {
+    it('should respond with status 200 and delete card data', async () => {
       const bodyLogin = new BodyLogin().generate();
       const user = await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)

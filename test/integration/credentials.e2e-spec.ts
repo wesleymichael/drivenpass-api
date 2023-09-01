@@ -356,7 +356,7 @@ describe('credentialsController (e2e)', () => {
         .expect(HttpStatus.FORBIDDEN);
     });
 
-    it('should respond with status 200 and credential data', async () => {
+    it('should respond with status 200 and delete credential data', async () => {
       const bodyLogin = new BodyLogin().generate();
       const user = await new RegisterFactory(prisma)
         .withEmail(bodyLogin.email)
