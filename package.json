@@ -24,7 +24,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "npm run test:load-envs -- jest -- --runInBand --config ./test/jest-e2e.json",
-    "test:e2e:cov": "npm run test:load-envs -- jest -- --runInBand --coverage --config ./test/jest-e2e.json"
+    "test:e2e:cov": "npm run test:load-envs -- jest -- --runInBand --coverage --config ./test/jest-e2e.json",
+    "prisma:prod": "npx prisma migrate deploy",
+    "prisma:prod:seed": "npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
