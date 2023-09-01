@@ -57,4 +57,8 @@ export class CardsService {
 
     return await this.repository.deleteCard(id);
   }
+
+  async deleteAllCards(userId: number) {
+    return await this.repository.deleteAllCards(userId);
+  }
 }

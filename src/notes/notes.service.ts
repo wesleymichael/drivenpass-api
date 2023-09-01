@@ -52,4 +52,8 @@ export class NotesService {
 
     return await this.repository.deleteNote(id);
   }
+
+  async deleteAllNotes(userId: number) {
+    return await this.repository.deleteAllNotes(userId);
+  }
 }

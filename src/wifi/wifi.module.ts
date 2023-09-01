@@ -8,5 +8,6 @@ import { WifiRepository } from './wifi.repository';
   imports: [UsersModule],
   controllers: [WifiController],
   providers: [WifiService, WifiRepository],
+  exports: [WifiService],
 })
 export class WifiModule {}

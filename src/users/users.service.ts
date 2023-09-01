@@ -28,4 +28,8 @@ export class UsersService {
 
     return user;
   }
+
+  async deleteUser(id: number) {
+    return this.repository.deleteUser(id);
+  }
 }

@@ -43,6 +43,14 @@ export class WifiRepository {
     });
   }
 
+  deleteAllWifiData(userId: number) {
+    return this.prisma.wifi.deleteMany({
+      where: {
+        userId,
+      },
+    });
+  }
+
   private decryptWifiData(wifi: Wifi[]) {
     return wifi.map((wifiObj) => {
       return {

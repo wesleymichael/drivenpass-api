@@ -52,4 +52,8 @@ export class CredentialsService {
 
     return await this.repository.deleteCredential(id);
   }
+
+  async deleteAllCredentials(userId: number) {
+    return await this.repository.deleteAllCredentials(userId);
+  }
 }

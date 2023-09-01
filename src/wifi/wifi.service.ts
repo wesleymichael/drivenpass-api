@@ -43,4 +43,8 @@ export class WifiService {
 
     return await this.repository.deleteWifi(id);
   }
+
+  async deleteAllWifiData(userId: number) {
+    return await this.repository.deleteAllWifiData(userId);
+  }
 }

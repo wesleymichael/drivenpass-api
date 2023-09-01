@@ -8,9 +8,19 @@ import { CredentialsModule } from './credentials/credentials.module';
 import { NotesModule } from './notes/notes.module';
 import { CardsModule } from './cards/cards.module';
 import { WifiModule } from './wifi/wifi.module';
+import { EraseModule } from './erase/erase.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, CredentialsModule, NotesModule, CardsModule, WifiModule],
+  imports: [
+    PrismaModule,
+    UsersModule,
+    AuthModule,
+    CredentialsModule,
+    NotesModule,
+    CardsModule,
+    WifiModule,
+    EraseModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
