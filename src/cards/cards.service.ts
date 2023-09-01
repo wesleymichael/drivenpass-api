@@ -39,7 +39,7 @@ export class CardsService {
     }
 
     if (card[0].userId !== userId) {
-      throw new ForbiddenException('Credential belongs to another user');
+      throw new ForbiddenException('Card belongs to another user');
     }
 
     return card;
