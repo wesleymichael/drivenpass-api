@@ -30,6 +30,13 @@ export class WifiRepository {
     return this.decryptWifiData(wifi);
   }
 
+  async findWifiById(id: number) {
+    const wifi = await this.prisma.wifi.findFirst({
+      where: { id },
+    });
+    return wifi ? this.decryptWifiData([wifi]) : [];
+  }
+
   private decryptWifiData(wifi: Wifi[]) {
     return wifi.map((wifiObj) => {
       return {

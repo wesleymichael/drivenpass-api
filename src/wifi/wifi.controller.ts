@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { WifiService } from './wifi.service';
 import { AuthGuard } from '@/guards/auth.guard';
 import { User } from '@/decorators/user.decorator';
@@ -18,5 +27,16 @@ export class WifiController {
   @Get()
   async findAllWifi(@User() user: Users) {
     return await this.wifiService.findAllWifiByUserId(user.id);
+  }
+
+  @Get('/:id')
+  async findCredentialById(
+    @Param('id', ParseIntPipe) id: number,
+    @User() user: Users,
+  ) {
+    if (id <= 0) {
+      throw new BadRequestException('ID must be a positive integer');
+    }
+    return await this.wifiService.findWifiById(id, user.id);
   }
 }
