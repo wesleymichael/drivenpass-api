@@ -37,6 +37,12 @@ export class WifiRepository {
     return wifi ? this.decryptWifiData([wifi]) : [];
   }
 
+  deleteWifi(id: number) {
+    return this.prisma.wifi.delete({
+      where: { id },
+    });
+  }
+
   private decryptWifiData(wifi: Wifi[]) {
     return wifi.map((wifiObj) => {
       return {

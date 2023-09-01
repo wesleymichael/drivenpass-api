@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -30,7 +31,7 @@ export class WifiController {
   }
 
   @Get('/:id')
-  async findCredentialById(
+  async findWifiById(
     @Param('id', ParseIntPipe) id: number,
     @User() user: Users,
   ) {
@@ -38,5 +39,13 @@ export class WifiController {
       throw new BadRequestException('ID must be a positive integer');
     }
     return await this.wifiService.findWifiById(id, user.id);
+  }
+
+  @Delete('/:id')
+  async deleteWifi(@Param('id', ParseIntPipe) id: number, @User() user: Users) {
+    if (id <= 0) {
+      throw new BadRequestException('ID must be a positive integer');
+    }
+    return await this.wifiService.deleteWifi(id, user.id);
   }
 }
