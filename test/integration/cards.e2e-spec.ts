@@ -3,35 +3,36 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '@/app.module';
 import { PrismaService } from '@/prisma/prisma.service';
-import { PrismaModule } from '@/prisma/prisma.module';
-import { cleanDB } from '../helpers';
 import { RegisterFactory } from '../factories/register.factory';
 import { login } from '../factories/login';
 import { BodyLogin } from '../factories/body.login';
 import { BodyCard } from '../factories/cards.body';
 import { faker } from '@faker-js/faker';
 import { CardsFactory } from '../factories/cards.factory';
+import { E2EUtils } from '../helpers';
 
 describe('cardsController (e2e)', () => {
   let app: INestApplication;
-  let prisma: PrismaService;
+  const prisma: PrismaService = new PrismaService();
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, PrismaModule],
-    }).compile();
+      imports: [AppModule],
+    })
+      .overrideProvider(PrismaService)
+      .useValue(prisma)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
-    prisma = await moduleFixture.resolve(PrismaService);
-
-    await cleanDB(prisma);
-
     await app.init();
+
+    await E2EUtils.cleanDb(prisma);
   });
 
   afterAll(async () => {
     await app.close();
+    await prisma.$disconnect();
   });
 
   describe('/cards (POST)', () => {

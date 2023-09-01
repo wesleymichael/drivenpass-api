@@ -3,31 +3,32 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '@/app.module';
 import { PrismaService } from '@/prisma/prisma.service';
-import { PrismaModule } from '@/prisma/prisma.module';
-import { cleanDB } from '../helpers';
 import { RegisterDto } from '@/auth/dto/register.dto';
 import { RegisterFactory } from '../factories/register.factory';
+import { E2EUtils } from '../helpers';
 
 describe('authController (e2e)', () => {
   let app: INestApplication;
-  let prisma: PrismaService;
+  const prisma: PrismaService = new PrismaService();
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, PrismaModule],
-    }).compile();
+      imports: [AppModule],
+    })
+      .overrideProvider(PrismaService)
+      .useValue(prisma)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
-    prisma = await moduleFixture.resolve(PrismaService);
-
-    await cleanDB(prisma);
-
     await app.init();
+
+    await E2EUtils.cleanDb(prisma);
   });
 
   afterAll(async () => {
     await app.close();
+    await prisma.$disconnect();
   });
 
   describe('/auth/register (POST)', () => {
@@ -140,7 +141,7 @@ describe('authController (e2e)', () => {
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it('should return status 401 if email not invalid', async () => {
+    it('should return status 401 if email not valid', async () => {
       await new RegisterFactory(prisma)
         .withEmail('teste@teste.com')
         .withPassword('@Abcdefg1970')
