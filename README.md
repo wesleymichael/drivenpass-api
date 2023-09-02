@@ -2,6 +2,18 @@
 
 Este projeto é uma aplicação de gerenciamento de dados sensíveis, desenvolvida com o objetivo de fornecer funcionalidades para criar, acessar e excluir informações relacionadas a contas de usuário, credenciais, notas seguras, cartões e senhas de wifi. Ele é projetado para garantir a segurança dos dados e a privacidade dos usuários.
 
+### Stacks principais do projeto:
+- **NestJS**
+- **PrismaORM**
+- **Typescript**
+- **Bibliotecas de Criptografia**:
+   - `bcrypt`
+   - `cryptr`
+- **Testes automatizados**:
+  - `jest`
+  - `supertest`
+
+<br>
 
 ## Como Executar
 
