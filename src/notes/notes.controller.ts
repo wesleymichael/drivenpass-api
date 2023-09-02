@@ -33,17 +33,12 @@ import { NoteResponse } from './dto/noteResponse';
 
 @ApiTags('Notes')
 @UseGuards(AuthGuard)
+@ApiBearerAuth('Authorization')
 @Controller('notes')
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
   @Post()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiBody({ type: NotesDTO })
   @ApiOperation({ summary: 'Create note' })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
@@ -54,12 +49,6 @@ export class NotesController {
   }
 
   @Get()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find all notes' })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
   @ApiOkResponse({
@@ -71,12 +60,6 @@ export class NotesController {
   }
 
   @Get('/:id')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find note by noteId' })
   @ApiParam({ name: 'id', description: 'Note id', example: 1 })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
@@ -95,12 +78,6 @@ export class NotesController {
   }
 
   @Delete('/:id')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete note by noteId' })
   @ApiParam({ name: 'id', description: 'Note id', example: 1 })
   @ApiBadRequestResponse({ description: 'Id not valid' })

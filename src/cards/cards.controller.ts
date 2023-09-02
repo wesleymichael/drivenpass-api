@@ -33,17 +33,12 @@ import { CardResponse } from './dto/cardResponse';
 
 @ApiTags('Cards')
 @UseGuards(AuthGuard)
+@ApiBearerAuth('Authorization')
 @Controller('cards')
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}
 
   @Post()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiBody({ type: CardsDTO })
   @ApiOperation({ summary: 'Create card' })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
@@ -54,12 +49,6 @@ export class CardsController {
   }
 
   @Get()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find all cards' })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
   @ApiOkResponse({
@@ -71,12 +60,6 @@ export class CardsController {
   }
 
   @Get('/:id')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find card by cardId' })
   @ApiParam({ name: 'id', description: 'Card id', example: 1 })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
@@ -95,12 +78,6 @@ export class CardsController {
   }
 
   @Delete('/:id')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete card by cardId' })
   @ApiParam({ name: 'id', description: 'Card id', example: 1 })
   @ApiBadRequestResponse({ description: 'Id not valid' })

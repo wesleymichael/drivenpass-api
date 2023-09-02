@@ -15,18 +15,13 @@ import {
 } from '@nestjs/swagger';
 
 @ApiTags('Erase')
+@ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard)
 @Controller('erase')
 export class EraseController {
   constructor(private readonly eraseService: EraseService) {}
 
   @Delete()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiBody({
     schema: {
       type: 'object',

@@ -13,6 +13,10 @@ async function bootstrap() {
     .setDescription('DrivenPass API description')
     .setVersion('1.0')
     .addTag('drivenpass')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', name: 'JWT', description: 'Enter JWT token', }, 
+      'Authorization'
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

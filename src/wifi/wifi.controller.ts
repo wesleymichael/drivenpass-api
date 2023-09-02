@@ -32,17 +32,12 @@ import { WifiResponse } from './dto/wifiResponse';
 
 @ApiTags('Wifi')
 @UseGuards(AuthGuard)
+@ApiBearerAuth('Authorization')
 @Controller('wifi')
 export class WifiController {
   constructor(private readonly wifiService: WifiService) {}
 
   @Post()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiBody({ type: WifiDTO })
   @ApiOperation({ summary: 'Create wifi' })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
@@ -52,12 +47,6 @@ export class WifiController {
   }
 
   @Get()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find all wifi data' })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
   @ApiOkResponse({
@@ -69,12 +58,6 @@ export class WifiController {
   }
 
   @Get('/:id')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find wifi by wifiId' })
   @ApiParam({ name: 'id', description: 'Wifi id', example: 1 })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
@@ -93,12 +76,6 @@ export class WifiController {
   }
 
   @Delete('/:id')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete wifi by wifiId' })
   @ApiParam({ name: 'id', description: 'Wifi id', example: 1 })
   @ApiBadRequestResponse({ description: 'Id not valid' })

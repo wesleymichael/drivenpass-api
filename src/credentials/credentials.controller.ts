@@ -31,19 +31,14 @@ import {
 } from '@nestjs/swagger';
 import { CredentialResponse } from './dto/credentialResponse';
 
-@ApiTags('Credentials - Login information for a website or service')
 @UseGuards(AuthGuard)
+@ApiBearerAuth('Authorization')
+@ApiTags('Credentials - Login information for a website or service')
 @Controller('credentials')
 export class CredentialsController {
   constructor(private readonly credentialsService: CredentialsService) {}
 
   @Post()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiBody({ type: CredentialDTO })
   @ApiOperation({ summary: 'Create credential' })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
@@ -60,12 +55,6 @@ export class CredentialsController {
   }
 
   @Get()
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find all credentials' })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
   @ApiOkResponse({
@@ -77,12 +66,6 @@ export class CredentialsController {
   }
 
   @Get('/:id')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find credential by credentialId' })
   @ApiParam({ name: 'id', description: 'Credential id', example: 1 })
   @ApiUnauthorizedResponse({ description: 'Token not sent or invalid' })
@@ -103,12 +86,6 @@ export class CredentialsController {
   }
 
   @Delete('/:id')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token for authentication',
-    required: true,
-  })
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete credential by credentialId' })
   @ApiParam({ name: 'id', description: 'Credential id', example: 1 })
   @ApiBadRequestResponse({ description: 'Id not valid' })
