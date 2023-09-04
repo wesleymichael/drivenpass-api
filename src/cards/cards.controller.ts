@@ -19,7 +19,6 @@ import {
   ApiBody,
   ApiOperation,
   ApiBearerAuth,
-  ApiHeader,
   ApiUnauthorizedResponse,
   ApiConflictResponse,
   ApiCreatedResponse,

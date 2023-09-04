@@ -23,7 +23,7 @@ export class BodyCard {
     isDebit?: boolean,
   ) {
     this._title = title || faker.finance.accountName();
-    this._number = number || faker.finance.creditCardNumber().toString();
+    this._number = number || faker.finance.creditCardNumber().replace(/-/g, '');
     this._name = name || faker.person.fullName();
     this._cvv = cvv || faker.finance.creditCardCVV();
     this._exp = exp || faker.date.month();

@@ -60,6 +60,7 @@ describe('cardsController (e2e)', () => {
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
       const bodyCard1 = new BodyCard().generate();
       const bodyCard2 = new BodyCard().generate();
@@ -67,6 +68,7 @@ describe('cardsController (e2e)', () => {
         .post('/cards')
         .send(bodyCard1)
         .set('Authorization', `Bearer ${body.token}`);
+
       return await request(app.getHttpServer())
         .post('/cards')
         .send({ ...bodyCard2, title: bodyCard1.title })
@@ -80,6 +82,7 @@ describe('cardsController (e2e)', () => {
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
       const bodyCard1 = new BodyCard().generate();
       const bodyCard2 = new BodyCard().generate();
@@ -87,6 +90,7 @@ describe('cardsController (e2e)', () => {
         .post('/cards')
         .send(bodyCard1)
         .set('Authorization', `Bearer ${body.token}`);
+
       return await request(app.getHttpServer())
         .post('/cards')
         .send({ ...bodyCard2, number: bodyCard1.number })
@@ -100,8 +104,10 @@ describe('cardsController (e2e)', () => {
         .withEmail(bodyLogin.email)
         .withPassword(bodyLogin.password)
         .persist();
+
       const { body } = await login(app, bodyLogin);
       const bodyCard = new BodyCard().generate();
+
       await request(app.getHttpServer())
         .post('/cards')
         .send(bodyCard)

@@ -22,7 +22,9 @@ export class CardsDTO {
     example: '1111222233334444',
     description: 'Card number',
   })
-  @Length(16, 16)
+  @Length(13, 19, {
+    message: 'O número do cartão deve ter entre 13 e 19 dígitos',
+  })
   @Matches(/^[0-9]*$/, {
     message: 'O número do cartão deve conter apenas dígitos numéricos.',
   })
