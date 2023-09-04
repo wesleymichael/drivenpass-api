@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsString,
+  Length,
+  Matches,
+} from 'class-validator';
 
 export class CardsDTO {
   @IsString()
@@ -13,8 +19,12 @@ export class CardsDTO {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    example: '11112222333344445555',
+    example: '1111222233334444',
     description: 'Card number',
+  })
+  @Length(16, 16)
+  @Matches(/^[0-9]*$/, {
+    message: 'O número do cartão deve conter apenas dígitos numéricos.',
   })
   number: string;
 
