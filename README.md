@@ -1,78 +1,74 @@
 # DrivenPass - Server
 
-Este projeto é uma aplicação de gerenciamento de dados sensíveis, desenvolvida com o objetivo de fornecer funcionalidades para criar, acessar e excluir informações relacionadas a contas de usuário, credenciais, notas seguras, cartões e senhas de wifi. Ele é projetado para garantir a segurança dos dados e a privacidade dos usuários.
+This project is a sensitive data management application, developed with the goal of providing functionalities to create, access, and delete user account information, credentials, secure notes, cards, and Wi-Fi passwords. It is designed to ensure data security and user privacy.
 
+## Documentation
+- [Access the API documentation](https://drivenpass-api-sxdg.onrender.com/api)
 
-## Documentação
-- [Acesse a documentação da API](https://drivenpass-api-sxdg.onrender.com/api)
-
-
-## Stacks principais do projeto:
+## Project Main Stacks:
 
 - **NestJS**:
 - **PrismaORM**
-- **Ferramentas de desenvolvimento**:
-   - `Typescript`
+- **Development Tools**:
+   - `TypeScript`
    - `Eslint`
    - `Prettier`
-- **Bibliotecas de Criptografia**:
+- **Cryptography Libraries**:
    - `bcrypt`
    - `cryptr`
-- **Testes automatizados**:
+- **Automated Testing**:
   - `jest`
   - `supertest`
 
 <br>
 
-## Como Executar
+## How to Run
 
-Para executar esta aplicação, siga estas etapas:
+To run this application, follow these steps:
 
-1. Clone o repositório para sua máquina local.
+1. Clone the repository to your local machine.
 
-2. Instale as dependências do projeto:
+   ```bash
+   git clone https://github.com/wesleymichael/drivenpass-api.git
+   ```
+
+3. Install project dependencies:
 
    ```bash
    npm install
    ```
 
-3. Configure as variáveis de ambiente:
- - Faça uma cópia do arquivo `.env.example` e configure a variável de ambiente para desenvolvimento `.env.development`.
- 
+4. Configure environment variables:
+   - Make a copy of the `.env.example` file and configure the environment variable for development as `.env.development`.
+
 <br>
 
-4. Aplique as migrações do banco de dados usando o Prisma em um ambiente de desenvolvimento:
+4. Apply database migrations using Prisma in a development environment:
    ```bash
    npm run dev:migration:generate
    npm run dev:migration:run
-   ``` 
+   ```
 
-5. Executando a aplicação:
+5. Start the application:
    ```bash
    npm run start:dev
    ```
+6. Documentation
+   - After running the application at [http://localhost:3000](http://localhost:3000), the **documentation** will be available at [http://localhost:3000/api](http://localhost:3000/api)
+   - Ensure you configure the database and other settings as appropriate before using the application in a production environment. Refer to the documentation for more details on configurations and additional features.
 
-<br>
+## Testing
+1. Configure environment variables:
+   - Make a copy of the `.env.example` file and configure the environment variable for testing as `.env.test`.
 
-## Documentação
-- Após subir a aplicação em [http://localhost:3000](http://localhost:3000) a **documentação** estará em [http://localhost:3000/api](http://localhost:3000/api)
+2. Apply database migrations using Prisma in a test environment:
 
-
-- Certifique-se de configurar o banco de dados e outras configurações conforme apropriado antes de usar a aplicação em um ambiente de produção. Consulte a documentação para obter mais detalhes sobre as configurações e funcionalidades adicionais.
-
-
-## Testes
-1. Configure as variáveis de ambiente:
- - Faça uma cópia do arquivo `.env.example` e configure a variável de ambiente para teste `.env.test`.
-
-2. Aplique as migrações do banco de dados usando o Prisma em um ambiente de testes:
-  
     ```bash
     npm run test:migration:generate
     npm run test:migration:run
-    ``` 
+    ```
 
-3. Execute os comandos:
+3. Run the following commands:
    ```bash
     # e2e tests
     $ npm run test:e2e
@@ -83,134 +79,135 @@ Para executar esta aplicação, siga estas etapas:
 
 <br>
 
-## Rotas e Funcionalidades
+## Routes and Functionalities
 
 ### ❤️ Health (`/health`)
 
-- Rota somente para garantir que a aplicação está em pé.
-- **GET** `/health`: Retorna a mensagem `"I am okay!"` com o status code `200 OK`.
+- Route solely for ensuring the application is up and running.
+- **GET** `/health`: Returns the message `"I am okay!"` with the status code `200 OK`.
 
-### 👤 Usuários (`/users`)
+### 👤 Users (`/users`)
 
-- A aplicação permite que os usuários criem contas e as utilizem para acessar outras funcionalidades.
+- The application allows users to create accounts and use them to access other functionalities.
 
-#### Criação de Contas
+#### Account Creation
 
-- Os usuários devem fornecer um e-mail válido e uma senha para criar uma conta.
-- Se o e-mail já estiver em uso, a aplicação não permitirá a criação da conta (`409 Conflict`).
-- A senha deve atender aos critérios de segurança, incluindo pelo menos 10 caracteres, 1 número, 1 letra minúscula, 1 letra maiúscula e 1 caractere especial (`400 Bad Request`).
-- As senhas são armazenadas criptografadas no banco de dados, usando a biblioteca [bcrypt](https://www.npmjs.com/package/bcrypt).
+- Users must provide a valid email and password to create an account.
+- If the email is already in use, the application will not allow the account creation (`409 Conflict`).
+- Passwords must meet security criteria, including at least 10 characters, 1 number, 1 lowercase letter, 1 uppercase letter, and 1 special character (`400 Bad Request`).
+- Passwords are stored securely in the database using the [bcrypt](https://www.npmjs.com/package/bcrypt) library.
 
-#### Acesso de Conta
+#### Account Access
 
-- Os usuários devem utilizar o e-mail e senha cadastrados para acessar suas contas.
-- Caso sejam fornecidos dados incompatíveis, a aplicação responderá com `401 Unauthorized`.
-- Após um login bem-sucedido, os usuários receberão um token JWT para autenticação posterior.
-- **Este token deve ser enviado em todas as requisições para identificar o usuário.**
+- Users must use the registered email and password to access their accounts.
+- If incompatible data is provided, the application will respond with `401 Unauthorized`.
+- After a successful login, users will receive a JWT token for future authentication.
+- **This token must be sent in all requests to identify the user.**
 
-### 🔑 Credenciais (`/credentials`)
+### 🔑 Credentials (`/credentials`)
 
-- Credenciais se referem a informações de login para sites e serviços.
+- Credentials refer to login information for websites and services.
 
-#### Criação de Credenciais
+#### Credential Creation
 
-- Para registrar uma nova credencial, o usuário deve fornecer uma URL, um nome de usuário e uma senha.
-- O usuário também deve informar um título/nome/rótulo para a credencial, uma vez que é possível cadastrar várias credenciais para um mesmo site.
-- Caso nenhum dos dados seja enviado, a aplicação responderá com `400 Bad Request`.
-- Cada credencial deve possuir um título/nome/rótulo único. Tentativas de criar duas credenciais com o mesmo nome serão impedidas (`409 Conflict`).
-- As senhas das credenciais são criptografadas usando um segredo da aplicação, com o uso da biblioteca [cryptr](https://www.npmjs.com/package/cryptr).
+- To register a new credential, the user must provide a URL, a username, and a password.
+- The user must also provide a title/name/label for the credential since it is possible to register multiple credentials for the same site.
+- If none of the data is sent, the application will respond with `400 Bad Request`.
+- Each credential must have a unique title/name/label. Attempts to create two credentials with the same name will be prevented (`409 Conflict`).
+- Credential passwords are encrypted in the database using an application secret, with the use of the [cryptr](https://www.npmjs.com/package/cryptr) library.
 
-#### Busca de Credenciais
+#### Credential Retrieval
 
-- A aplicação permite a obtenção de todas as credenciais na rota `/credentials` ou de uma credencial específica através do seu ID na rota `/credentials/{id}`.
-- Se um usuário tentar acessar uma credencial que não pertence a ele, a aplicação responderá com `403 Forbidden`.
-- Se for enviado um ID inválido, a resposta será `400 Bad Request`.
-- Se o ID não existir, a resposta será `404 Not Found`.
-- Todas as credenciais retornadas aparecem com a senha descriptografada (`200 OK`).
+- The application allows users to retrieve all credentials on the `/credentials` route or a specific credential using its ID on the `/credentials/{id}` route.
+- If a user tries to access a credential that does not belong to them, the application will respond with `403 Forbidden`.
+- If an invalid ID is sent, the response will be `400 Bad Request`.
+- If the ID does not exist, the response will be `404 Not Found`.
+- All returned credentials appear with the password decrypted (`200 OK`).
 
-#### Deletar Credenciais
+#### Delete Credentials
 
-- A aplicação permite a exclusão de credenciais com base no seu ID.
-- Se for enviado um ID inválido, a resposta será `400 Bad Request`.
-- Se o ID não existir, a resposta será `404 Not Found`.
-- Se a credencial pertencer a outro usuário, a resposta será `403 Forbidden`.
+- The application allows the deletion of credentials based on their ID.
+- If an invalid ID is sent, the response will be `400 Bad Request`.
+- If the ID does not exist, the response will be `404 Not Found`.
+- If the credential belongs to another user, the response will be `403 Forbidden`.
 
-### ✏️ Notas Seguras (`/notes`)
+### ✏️ Secure Notes (`/notes`)
 
-- Notas Seguras são informações em formato de texto.
+- Secure Notes are text-based information.
 
-#### Criação de Notas Seguras
+#### Secure Note Creation
 
-- Para registrar uma nova nota segura, o usuário deve fornecer um título/nome/rótulo e o conteúdo da nota.
-- Se nenhum dos dados for enviado, a aplicação responderá com `400 Bad Request`.
-- Cada nota deve possuir um título único. Tentativas de criar duas notas com o mesmo nome serão impedidas (`409 Conflict`).
+- To register a new secure note, the user must provide a title/name/label and the content of the note.
+- If none of the data is sent, the application will respond with `400 Bad Request`.
+- Each note must have a unique title. Attempts to create two notes with the same name will be prevented (`409 Conflict`).
 
-#### Busca de Notas Seguras
+#### Secure Note Retrieval
 
-- A aplicação permite a obtenção de todas as notas seguras na rota `/notes` ou de uma nota segura específica através do seu ID na rota `/notes/{id}`.
-- Se um usuário tentar acessar uma nota que não pertence a ele, a aplicação responderá com `403 Forbidden`.
-- Se for enviado um ID inválido, a resposta será `400 Bad Request`.
-- Se o ID não existir, a resposta será `404 Not Found`.
+- The application allows users to retrieve all secure notes on the `/notes` route or a specific secure note using its ID on the `/notes/{id}` route.
+- If a user tries to access a note that does not belong to them, the application will respond with `403 Forbidden`.
+- If an invalid ID is sent, the response will be `400 Bad Request`.
+- If the ID does not exist, the response will be `404 Not Found`.
 
-#### Deletar Notas Seguras
+#### Delete Secure Notes
 
-- A aplicação permite a exclusão de notas seguras com base no seu ID.
-- Se for enviado um ID inválido, a resposta será `400 Bad Request`.
-- Se o ID não existir, a resposta será `404 Not Found`.
-- Se a nota pertencer a outro usuário, a resposta será `403 Forbidden`.
+- The application allows the deletion of secure notes based on their ID.
+- If an invalid ID is sent, the response will be `400 Bad Request`.
+- If the ID does not exist, the response will be `404 Not Found`.
+- If the note belongs to another user, the response will be `403 Forbidden`.
 
-### 💳 Cartões (`/cards`)
+### 💳 Cards (`/cards`)
 
-- Os cartões representam cartões de crédito e/ou débito.
+- Cards represent credit and/or debit cards.
 
-#### Criação de Cartões
+#### Card Creation
 
-- Para registrar um novo cartão, o usuário deve fornecer o número do cartão, o nome impresso, o código de segurança, a data de expiração, a senha, se ele é virtual e o seu tipo (crédito, débito ou ambos).
-- Se nenhum dos dados for enviado, a aplicação responderá com `400 Bad Request`.
-- Cada cartão deve possuir um título/nome/rótulo único. Tentativas de criar dois cartões com o mesmo nome serão impedidas (`409 Conflict`).
-- O código de segurança e a senha do cartão são
+- To register a new card, the user must provide the card number, printed name, security code, expiration date, password, whether it is virtual, and its type (credit, debit, or both).
+- If none of the data is sent, the application will respond with `400 Bad Request`.
+- Each card must have a unique title/name/label. Attempts to create two cards with the same name will be prevented (`409 Conflict`).
+- The card's security code and password are encrypted using an application secret, with the use of the [cryptr](https://www.npmjs.com/package/cryptr) library.
 
- criptografados usando um segredo da aplicação, com o uso da biblioteca [cryptr](https://www.npmjs.com/package/cryptr).
+#### Card Retrieval
 
-#### Busca de Cartões
+- The application allows users to retrieve all their cards on the `/cards` route or a specific card using its ID on the `/cards/{id}` route.
+- If a user tries to access
 
-- A aplicação permite a obtenção de todos os cartões do usuário na rota `/cards` ou de um cartão específico através do seu ID na rota `/cards/{id}`.
-- Se um usuário tentar acessar um cartão que não pertence a ele, a aplicação responderá com `403 Forbidden`.
-- Se o cartão não existir, a resposta será `404 Not Found`.
+ a card that does not belong to them, the application will respond with `403 Forbidden`.
+- If the card does not exist, the response will be `404 Not Found`.
 
-#### Deletar Cartões
+#### Delete Cards
 
-- A aplicação permite a exclusão de cartões com base no seu ID.
-- Se o ID não existir, a resposta será `404 Not Found`.
-- Se o cartão pertencer a outro usuário, a resposta será `403 Forbidden`.
+- The application allows the deletion of cards based on their ID.
+- If an invalid ID is sent, the response will be `400 Bad Request`.
+- If the ID does not exist, the response will be `404 Not Found`.
+- If the card belongs to another user, the response will be `403 Forbidden`.
 
+### 📶 Wi-Fi (`/wifi`)
 
-### 📶 Wi-fi (`/wifi`)
+- Wi-Fi entries represent access data for an internet network.
 
-- Wi-fi’s representam os dados de acesso a uma rede de internet.
+#### Wi-Fi Creation
 
-#### Criação de Wi-fi
+- To register a new Wi-Fi entry, the user must provide the network name, network password, and a title to differentiate each data entry.
+- Since it is sensitive information, the internet network password must be encrypted using an application secret, with the use of the [cryptr](https://www.npmjs.com/package/cryptr) library.
 
-- Para registrar um novo wifi, o usuário deve fornecer o nome da rede, senha da rede e um título para diferenciar cada um dos dados.
-- Por ser informação sensível, a senha da rede de internet deve ser criptografada usando um segredo da aplicação, com o uso da biblioteca [cryptr](https://www.npmjs.com/package/cryptr).
+#### Wi-Fi Retrieval
 
-#### Busca de Redes Wi-fi
+- The application allows users to retrieve all Wi-Fi entries on the `/wifi` route or a specific Wi-Fi entry using its ID on the `/wifi/{id}` route.
+- If a user tries to access a Wi-Fi entry that does not belong to them or does not exist, the application will respond with `403 Forbidden` or `404 Not Found`, respectively.
 
-- A aplicação permite que o usuário obtenha todas as redes Wi-fi na rota `/wifi` ou uma rede específica através do seu ID na rota `/wifi/{id}`.
-- Se um usuário tentar acessar uma rede Wi-fi que não pertence a ele ou que não existe, a aplicação responderá com `403 Forbidden` ou `404 Not Found`, respectivamente. 
+#### Wi-Fi Deletion
 
-#### Deleção de Redes Wi-fi
+- The application allows the deletion of Wi-Fi entries based on their ID.
+- If an invalid ID is sent, the response will be `400 Bad Request`.
+- If the ID does not exist, the response will be `404 Not Found`.
+- If the Wi-Fi entry belongs to another user, the response will be `403 Forbidden`.
 
-- A aplicação permite que uma rede Wi-fi seja deletada com base no seu ID.
-- Se o ID não existir, a resposta será `404 Not Found`.
-- Se o ID pertencer a uma rede Wi-fi de outra pessoa, a aplicação responderá com ``403 Forbidden`.
+### 🗑️ Delete Account and All User Data (`/erase`)
 
-### 🗑️ Deletar Conta e todos os dados do usuário (`/erase`)
+- The route allows the user to delete their account and all associated data.
+- When this action occurs, credential, note, card, and other data are deleted from the database, along with the user's registration.
+- Since it is a destructive action, the password must be sent again in the request body for the action to be executed. If the password is incorrect, the response will be `401 Unauthorized`.
 
-- A rota permite que o usuário exclua sua conta e todos os dados associados a ela.
-- Quando essa ação ocorre, os dados de credenciais, notas, cartões e outros são deletados do banco de dados, bem como o próprio cadastro do usuário.
-- Como é uma ação destrutiva, a senha deve ser enviada novamente no corpo da requisição para que a ação seja executada. Caso a senha esteja incorreta, a resposta será `401 Unauthorized`.
+## Contributions
 
-## Contribuições
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas (issues) e enviar pull requests para melhorar este projeto.
+Contributions are welcome! Feel free to open issues and send pull requests to improve this project.
