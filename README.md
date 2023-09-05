@@ -32,15 +32,14 @@ To run this application, follow these steps:
    git clone https://github.com/wesleymichael/drivenpass-api.git
    ```
 
-3. Install project dependencies:
+2. Install project dependencies:
 
    ```bash
    npm install
    ```
 
-4. Configure environment variables:
+3. Configure environment variables:
    - Make a copy of the `.env.example` file and configure the environment variable for development as `.env.development`.
-
 <br>
 
 4. Apply database migrations using Prisma in a development environment:
