@@ -1,4 +1,4 @@
-# Projeto de gerenciamento de dados sensíveis
+# DrivenPass - Server
 
 Este projeto é uma aplicação de gerenciamento de dados sensíveis, desenvolvida com o objetivo de fornecer funcionalidades para criar, acessar e excluir informações relacionadas a contas de usuário, credenciais, notas seguras, cartões e senhas de wifi. Ele é projetado para garantir a segurança dos dados e a privacidade dos usuários.
 
@@ -8,9 +8,13 @@ Este projeto é uma aplicação de gerenciamento de dados sensíveis, desenvolvi
 
 
 ## Stacks principais do projeto:
-- **NestJS**
+
+- **NestJS**:
 - **PrismaORM**
-- **Typescript**
+- **Ferramentas de desenvolvimento**:
+   - `Typescript`
+   - `Eslint`
+   - `Prettier`
 - **Bibliotecas de Criptografia**:
    - `bcrypt`
    - `cryptr`
