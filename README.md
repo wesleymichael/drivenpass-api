@@ -63,7 +63,7 @@ To run this application, follow these steps:
    npm run start:dev
    ```
 6. Documentation
-   - After running the application at [http://localhost:3000](http://localhost:3000), the **documentation** will be available at [http://localhost:3000/api](http://localhost:3000/api)
+   - After running the application at [http://localhost:4000](http://localhost:4000), the **documentation** will be available at [http://localhost:4000/api](http://localhost:4000/api)
    - Ensure you configure the database and other settings as appropriate before using the application in a production environment. Refer to the documentation for more details on configurations and additional features.
 
 ## Testing
