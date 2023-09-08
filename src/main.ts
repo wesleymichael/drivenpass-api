@@ -24,7 +24,7 @@ async function bootstrap() {
     swaggerOptions: { defaultModelsExpandDepth: -1 },
   });
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 4000;
   await app.listen(port, () => {
     console.log('Server is up and running on port: ' + port);
   });
