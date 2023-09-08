@@ -2,25 +2,40 @@
 
 This project is a sensitive data management application, developed with the goal of providing functionalities to create, access, and delete user account information, credentials, secure notes, cards, and Wi-Fi passwords. It is designed to ensure data security and user privacy.
 
+1. [API Documentation](#documentation)
+2. [Project Main Stacks](#project-main-stacks)
+3. [How to Run](#how-to-run)
+4. [Testing](#testing)
+5. [Routes and Functionalities](#routes-and-functionalities)
+   - 5.1 [Health (`/health`)](#health)
+   - 5.2 [Users (`/users`)](#users)
+   - 5.3 [Credentials (`/credentials`)](#credentials)
+   - 5.4 [Secure Notes (`/notes`)](#secure-notes)
+   - 5.5 [Cards (`/cards`)](#cards)
+   - 5.6 [Wi-Fi (`/wifi`)](#wi-fi)
+   - 5.7 [Delete Account and All User Data (`/erase`)](#delete-account-and-all-user-data)
+5. [Contributions](#contributions)
+
+
 ## Documentation
 - [Access the API documentation](https://drivenpass-api-sxdg.onrender.com/api)
 
 ## Project Main Stacks:
+<p>
+   
+   ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
+   ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+   ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+   ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
+   ![Prettier](https://img.shields.io/badge/-Prettier-blue?style=for-the-badge)
+   ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+   ![supertest](https://img.shields.io/badge/-supertest-orange?style=for-the-badge)
+   ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+   ![bcrypt](https://img.shields.io/badge/-bcrypt-green?style=for-the-badge)
+   ![cryptr](https://img.shields.io/badge/-cryptr-green?style=for-the-badge)
+   
+</p>
 
-- **NestJS**:
-- **PrismaORM**
-- **Development Tools**:
-   - `TypeScript`
-   - `Eslint`
-   - `Prettier`
-- **Cryptography Libraries**:
-   - `bcrypt`
-   - `cryptr`
-- **Automated Testing**:
-  - `jest`
-  - `supertest`
-
-<br>
 
 ## How to Run
 
